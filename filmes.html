@@ -1,71 +1,262 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineVerse | Filmes</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <meta name="theme-color" content="#0b0712">
+  <title>Filmes | CineVerse</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0b0712;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:19px 6%;background:#100b19;border-bottom:1px solid #352545}
+    .logo{font-size:26px;font-weight:900;color:#c8a5ff}
+    .logo span{color:white}
+    nav{display:flex;gap:20px;flex-wrap:wrap}
+    nav a{font-size:14px;color:#ddd5e9}
+    nav a:hover,nav a.active{color:#c8a5ff}
+    .hero{padding:55px 6%;background:linear-gradient(110deg,#241238,#0b0712 80%)}
+    .eyebrow{color:#c8a5ff;text-transform:uppercase;font-size:12px;letter-spacing:3px;font-weight:bold}
+    h1{font-size:clamp(36px,5vw,56px);margin:13px 0}
+    .hero p{color:#c9bfd4;line-height:1.7;max-width:600px}
+    main{max-width:1600px;margin:auto;padding:35px 6%}
+    .tools{display:grid;grid-template-columns:minmax(180px,1fr) 180px 200px;gap:12px;margin-bottom:28px}
+    input,select{width:100%;min-width:0;padding:13px;color:white;background:#151020;border:1px solid #352545;border-radius:9px;outline:none}
+    input:focus,select:focus{border-color:#a66bff}
+    input::placeholder{color:#9c91aa}
+    .heading{margin-bottom:20px;font-size:24px}
+    .grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:25px 16px}
+    .card{min-width:0;cursor:pointer;transition:transform .2s}
+    .card:hover{transform:translateY(-5px)}
+    .poster{aspect-ratio:2/3;position:relative;overflow:hidden;border-radius:10px;background:linear-gradient(145deg,#543171,#171020);border:1px solid #382747}
+    .poster img{width:100%;height:100%;display:block;object-fit:cover}
+    .poster img.failed{display:none}
+    .fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;padding:12px;text-align:center;font-weight:bold;background:linear-gradient(145deg,#543171,#171020);overflow-wrap:anywhere}
+    .poster img.failed+.fallback{display:flex}
+    .fav{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;border:1px solid #ffffff40;background:#100b19e8;color:white;font-size:20px;cursor:pointer}
+    .fav.saved{color:#e0b9ff;background:#4c2868}
+    .card h3{font-size:14px;line-height:1.4;margin-top:10px}
+    .meta{color:#aaa0b8;font-size:12px;margin-top:5px}
+    .empty{display:none;color:#b9afc7;padding:30px 0;text-align:center;line-height:1.7}
+    .empty.show{display:block}
+    footer{margin-top:40px;padding:28px 6%;border-top:1px solid #352545;color:#9c91aa;text-align:center;font-size:12px;line-height:1.8}
+    .modal{display:none;position:fixed;inset:0;z-index:10;align-items:center;justify-content:center;padding:20px;background:#000d}
+    .modal.open{display:flex}
+    .modal-box{position:relative;width:min(540px,100%);padding:28px;border:1px solid #49345f;border-radius:15px;background:#151020}
+    .close{position:absolute;right:12px;top:8px;border:0;background:transparent;color:white;font-size:28px;cursor:pointer}
+    .modal-box h2{padding-right:30px;color:#c8a5ff}
+    .modal-info{color:#aaa0b8;font-size:13px;margin-top:10px}
+    .modal-desc{color:#ded6e8;line-height:1.8;margin-top:17px}
+    .modal-fav{width:100%;margin-top:20px;padding:13px;border:0;border-radius:8px;background:#a66bff;color:white;font-weight:bold;cursor:pointer}
+    @media(max-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    @media(max-width:700px){.header{padding:17px 5%;align-items:flex-start;flex-direction:column}nav{gap:15px}.hero{padding:42px 5%}main{padding:28px 5%}.tools{grid-template-columns:1fr 1fr}.tools input{grid-column:1/-1}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 12px}}
+    @media(max-width:430px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  </style>
 </head>
-<body data-page="movies">
-  <header class="topbar">
-    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
-    <nav class="main-nav" id="mainNav">
+<body>
+  <header class="header">
+    <a class="logo" href="index.html">Cine<span>Verse</span> ✦</a>
+    <nav>
       <a href="index.html">Início</a>
-      <a class="active" href="filmes.html">Filmes</a>
+      <a href="filmes.html" class="active">Filmes</a>
       <a href="series.html">Séries</a>
-      <a href="minha-lista.html">Minha lista ♥</a>
+      <a href="#" id="favoritesLink">Minha lista ♡</a>
     </nav>
-    <input class="global-search" id="globalSearch" type="search" placeholder="Buscar título...">
   </header>
 
-  <main class="page-main">
-    <section class="page-heading">
-      <p class="eyebrow">EXPLORE O CATÁLOGO</p>
-      <h1>Filmes para cada <span>universo.</span></h1>
-      <p>Descubra histórias de ficção, mistério, aventura e muito mais.</p>
-    </section>
+  <section class="hero">
+    <span class="eyebrow">CineVerse apresenta</span>
+    <h1>Universo dos filmes.</h1>
+    <p>Dos grandes sucessos às histórias que merecem ser descobertas. Encontre seu próximo filme favorito.</p>
+  </section>
 
-    <section class="filters">
-      <input id="catalogSearch" type="search" placeholder="Pesquisar filmes...">
-
-      <select id="genreFilter" aria-label="Filtrar por gênero">
-        <option value="all">Todos os gêneros</option>
-        <option>Ficção científica</option>
+  <main>
+    <h2 class="heading" id="pageTitle">Todos os filmes</h2>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Buscar filme..." aria-label="Buscar filme">
+      <select id="genre" aria-label="Filtrar por gênero">
+        <option value="todos">Todos os gêneros</option>
+        <option>Ação</option>
         <option>Aventura</option>
         <option>Drama</option>
-        <option>Mistério</option>
-        <option>Comédia</option>
         <option>Fantasia</option>
-        <option>Ação</option>
-        <option>Terror</option>
+        <option>Ficção científica</option>
+        <option>Animação</option>
       </select>
-
-      <select id="sortFilter" aria-label="Ordenar filmes">
-        <option value="featured">Em destaque</option>
-        <option value="title">Título A–Z</option>
-        <option value="year">Mais recentes</option>
+      <select id="sort" aria-label="Ordenar filmes">
+        <option value="recentes">Mais recentes</option>
+        <option value="antigos">Mais antigos</option>
+        <option value="az">Nome: A–Z</option>
       </select>
-
-      <button class="btn btn-secondary" id="clearFilters">Limpar filtros</button>
-    </section>
-
-    <p class="results-line" id="resultCount">Carregando filmes...</p>
-    <section class="movie-grid" id="catalogGrid"></section>
-
-    <div class="empty-state hidden" id="emptyState">
-      <span>⌕</span>
-      <h2>Nenhum filme encontrado</h2>
-      <p>Tente pesquisar outro nome ou limpar os filtros.</p>
     </div>
+    <section class="grid" id="grid" aria-label="Catálogo de filmes"></section>
+    <p class="empty" id="empty">Nenhum filme encontrado. Tente mudar a busca ou o filtro.</p>
   </main>
 
-  <footer class="footer">
-    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
-    <p>Catálogo demonstrativo. Os títulos são fictícios.</p>
-    <span>© 2026 CineVerse</span>
-  </footer>
-  <div class="toast" id="toast" role="status"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <button class="close" id="close" aria-label="Fechar" type="button">×</button>
+      <h2 id="modalTitle"></h2>
+      <p class="modal-info" id="modalInfo"></p>
+      <p class="modal-desc" id="modalDesc"></p>
+      <button class="modal-fav" id="modalFav" type="button">♡ Adicionar à minha lista</button>
+    </div>
+  </div>
+
+  <footer>CineVerse ✦ Seu universo de filmes.<br>Pôsteres carregados do TMDB. Projeto independente.</footer>
+
+  <script>
+    "use strict";
+
+    const BASE = "https://image.tmdb.org/t/p/w500";
+
+    const movies = [
+      {id:"dune2",name:"Duna: Parte Dois",year:2024,genre:"Ficção científica",poster:"/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",desc:"Paul Atreides une forças com Chani e os Fremen enquanto busca seu destino em Arrakis."},
+      {id:"spiderverse",name:"Homem-Aranha: Através do Aranhaverso",year:2023,genre:"Animação",poster:"/8Vt6mWEReuy4Of61Lnj5Xj607fg.jpg",desc:"Miles Morales atravessa diferentes universos e conhece outras versões do herói."},
+      {id:"barbie",name:"Barbie",year:2023,genre:"Aventura",poster:"/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",desc:"Barbie sai de seu mundo habitual e embarca em uma aventura inesperada."},
+      {id:"batman",name:"Batman",year:2022,genre:"Ação",poster:"/74xTEgt7R36Fpooo50r9T25onhq.jpg",desc:"Batman investiga crimes e uma conspiração que ameaça Gotham."},
+      {id:"insideout2",name:"Divertida Mente 2",year:2024,genre:"Animação",poster:"/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",desc:"Novas emoções chegam à mente de Riley durante uma fase de mudanças."},
+      {id:"oppenheimer",name:"Oppenheimer",year:2023,genre:"Drama",poster:"/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",desc:"Drama biográfico sobre o físico J. Robert Oppenheimer."},
+      {id:"wicked",name:"Wicked",year:2024,genre:"Fantasia",poster:"/xDGbZ0JJ3mYaGKy4Nzd9Kph6M9L.jpg",desc:"A amizade entre duas jovens bruxas transforma o destino de Oz."},
+      {id:"spiderman",name:"Homem-Aranha: Sem Volta para Casa",year:2021,genre:"Ação",poster:"/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",desc:"Peter Parker enfrenta consequências inesperadas depois que sua identidade é revelada."},
+      {id:"fightclub",name:"Clube da Luta",year:1999,genre:"Drama",poster:"/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg",desc:"Um homem insatisfeito conhece alguém que transforma sua visão do mundo."},
+      {id:"interstellar",name:"Interestelar",year:2014,genre:"Ficção científica",poster:"/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",desc:"Uma missão espacial procura novas possibilidades para o futuro da humanidade."}
+    ];
+
+    const grid = document.getElementById("grid");
+    const search = document.getElementById("search");
+    const genre = document.getElementById("genre");
+    const sort = document.getElementById("sort");
+    const empty = document.getElementById("empty");
+    const modal = document.getElementById("modal");
+    let selected = null;
+    let favoritesOnly = false;
+
+    function readFavorites(){
+      try {
+        const value = JSON.parse(localStorage.getItem("cineverse-favorites") || "[]");
+        return Array.isArray(value) ? value.filter(v => typeof v === "string") : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function writeFavorites(list){
+      try {
+        localStorage.setItem("cineverse-favorites",JSON.stringify(list));
+        return true;
+      } catch {
+        alert("Não foi possível salvar os favoritos neste navegador.");
+        return false;
+      }
+    }
+
+    function esc(value){
+      return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    function render(){
+      const query = search.value.trim().toLocaleLowerCase("pt-BR");
+      const selectedGenre = genre.value;
+      const favorites = readFavorites();
+
+      let list = movies.filter(m =>
+        m.name.toLocaleLowerCase("pt-BR").includes(query) &&
+        (selectedGenre === "todos" || m.genre === selectedGenre) &&
+        (!favoritesOnly || favorites.includes(m.id))
+      );
+
+      if(sort.value === "recentes") list.sort((a,b)=>b.year-a.year);
+      if(sort.value === "antigos") list.sort((a,b)=>a.year-b.year);
+      if(sort.value === "az") list.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
+
+      grid.innerHTML = list.map(m=>{
+        const saved = favorites.includes(m.id);
+        return `
+          <article class="card" tabindex="0" role="button" data-id="${esc(m.id)}" aria-label="Ver detalhes de ${esc(m.name)}">
+            <div class="poster">
+              <img src="${BASE}${m.poster}" alt="Pôster de ${esc(m.name)}" loading="lazy">
+              <div class="fallback">${esc(m.name)}</div>
+              <button class="fav ${saved?"saved":""}" type="button" data-fav="${esc(m.id)}" aria-label="${saved?"Remover":"Adicionar"} ${esc(m.name)} ${saved?"dos":"aos"} favoritos" aria-pressed="${saved}">${saved?"♥":"♡"}</button>
+            </div>
+            <h3>${esc(m.name)}</h3>
+            <p class="meta">${m.year} · ${esc(m.genre)}</p>
+          </article>`;
+      }).join("");
+
+      grid.querySelectorAll("img").forEach(img=>img.addEventListener("error",()=>img.classList.add("failed"),{once:true}));
+      empty.classList.toggle("show",list.length===0);
+      document.getElementById("pageTitle").textContent = favoritesOnly ? "Meus filmes favoritos" : "Todos os filmes";
+      document.getElementById("favoritesLink").textContent = favoritesOnly ? "Ver todos" : "Minha lista ♡";
+    }
+
+    function toggleFavorite(id){
+      const list=readFavorites();
+      const index=list.indexOf(id);
+      if(index<0) list.push(id); else list.splice(index,1);
+      if(writeFavorites(list)){
+        render();
+        updateModalButton();
+      }
+    }
+
+    function openDetails(id){
+      selected=movies.find(m=>m.id===id);
+      if(!selected)return;
+      document.getElementById("modalTitle").textContent=selected.name;
+      document.getElementById("modalInfo").textContent=`${selected.year} · Filme · ${selected.genre}`;
+      document.getElementById("modalDesc").textContent=selected.desc;
+      updateModalButton();
+      modal.classList.add("open");
+      document.body.style.overflow="hidden";
+      document.getElementById("close").focus();
+    }
+
+    function updateModalButton(){
+      if(!selected)return;
+      document.getElementById("modalFav").textContent=readFavorites().includes(selected.id)?"♥ Remover da minha lista":"♡ Adicionar à minha lista";
+    }
+
+    function closeModal(){
+      modal.classList.remove("open");
+      document.body.style.overflow="";
+    }
+
+    grid.addEventListener("click",e=>{
+      const fav=e.target.closest("[data-fav]");
+      if(fav){e.stopPropagation();toggleFavorite(fav.dataset.fav);return;}
+      const card=e.target.closest("[data-id]");
+      if(card)openDetails(card.dataset.id);
+    });
+
+    grid.addEventListener("keydown",e=>{
+      if(e.target.closest("button"))return;
+      if(e.key==="Enter"||e.key===" "){
+        const card=e.target.closest("[data-id]");
+        if(card){e.preventDefault();openDetails(card.dataset.id);}
+      }
+    });
+
+    [search,genre,sort].forEach(el=>{
+      el.addEventListener("input",render);
+      el.addEventListener("change",render);
+    });
+
+    document.getElementById("favoritesLink").addEventListener("click",e=>{
+      e.preventDefault();
+      favoritesOnly=!favoritesOnly;
+      render();
+    });
+
+    document.getElementById("modalFav").addEventListener("click",()=>{if(selected)toggleFavorite(selected.id);});
+    document.getElementById("close").addEventListener("click",closeModal);
+    modal.addEventListener("click",e=>{if(e.target===modal)closeModal();});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+    window.addEventListener("storage",render);
+
+    render();
+  </script>
 </body>
 </html>
