@@ -1,90 +1,502 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineVerse | Início</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <title>CineVerse | Seu universo de filmes</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #090711;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 6%;
+      background: #100c1c;
+      border-bottom: 1px solid #302044;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      color: #c9a4ff;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    nav { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    nav a {
+      color: #ddd5e9;
+      text-decoration: none;
+    }
+
+    nav a:hover { color: #c9a4ff; }
+
+    .hero {
+      min-height: 390px;
+      padding: 75px 7%;
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(90deg, #0b0813 10%, #0b0813dd 45%, #0b081355),
+        url("https://image.tmdb.org/t/p/w1280/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg")
+        center 35% / cover;
+    }
+
+    .hero-content { max-width: 570px; }
+
+    .tag {
+      color: #d5b5ff;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 66px);
+      margin: 15px 0;
+    }
+
+    .hero p {
+      color: #d1cbd9;
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .button {
+      border: 0;
+      background: #9c5cff;
+      color: white;
+      padding: 13px 21px;
+      border-radius: 9px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 22px;
+    }
+
+    .button:hover { background: #b27dff; }
+
+    main { padding: 38px 6%; }
+
+    .section-heading {
+      font-size: 27px;
+      margin-bottom: 20px;
+    }
+
+    .tools {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    input, select {
+      background: #171222;
+      border: 1px solid #403052;
+      color: white;
+      border-radius: 9px;
+      padding: 13px;
+      min-width: 180px;
+    }
+
+    input { flex: 1; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 24px 17px;
+    }
+
+    .movie {
+      min-width: 0;
+      cursor: pointer;
+      transition: transform .25s;
+    }
+
+    .movie:hover { transform: translateY(-7px); }
+
+    .poster {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      aspect-ratio: 2 / 3;
+      background: #21182e;
+      border: 1px solid #382748;
+    }
+
+    .poster img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .poster img.failed { display: none; }
+
+    .poster-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 15px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(145deg, #40215e, #100c1c);
+      font-weight: bold;
+    }
+
+    .poster img.failed + .poster-fallback { display: flex; }
+
+    .movie h3 {
+      font-size: 15px;
+      margin-top: 11px;
+      line-height: 1.4;
+    }
+
+    .movie p {
+      color: #a9a0b7;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .empty {
+      color: #bdb3ca;
+      padding: 25px 0;
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 15px;
+      color: #9d93aa;
+      border-top: 1px solid #302044;
+      margin-top: 35px;
+      font-size: 13px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #000c;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-content {
+      width: min(650px, 100%);
+      background: #171122;
+      border: 1px solid #49345f;
+      border-radius: 16px;
+      padding: 25px;
+      position: relative;
+    }
+
+    .close {
+      float: right;
+      color: white;
+      border: 0;
+      background: transparent;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .modal-content p {
+      color: #d0c7dc;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 18px 5%; }
+      .hero { padding: 55px 6%; min-height: 350px; }
+      main { padding: 30px 5%; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+      input, select { width: 100%; }
+    }
+  </style>
 </head>
-<body data-page="home">
-  <header class="topbar">
-    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
-
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
-
-    <nav class="main-nav" id="mainNav">
-      <a class="active" href="index.html">Início</a>
-      <a href="filmes.html">Filmes</a>
-      <a href="series.html">Séries</a>
-      <a href="minha-lista.html">Minha lista ♥</a>
+<body>
+  <header>
+    <div class="logo">CineVerse ✦</div>
+    <nav>
+      <a href="#inicio">Início</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#catalogo" id="favoritesLink">Minha lista ♡</a>
     </nav>
-
-    <input class="global-search" id="globalSearch" type="search"
-      placeholder="Buscar título...">
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-content">
-        <p class="eyebrow">✦ DESTAQUE CINEVERSE</p>
-        <p class="hero-kicker">UMA AVENTURA ORIGINAL</p>
-        <h1>O Eco das<br><span>Estrelas</span></h1>
-        <p class="hero-meta">2026 · Ficção científica · 2h 08min</p>
-        <p class="hero-description">
-          Um sinal desconhecido atravessa a galáxia. Uma equipe precisa
-          descobrir se está ouvindo uma mensagem ou um aviso.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="detalhes.html?id=eco-das-estrelas">
-            ▶ Ver detalhes
-          </a>
-          <a class="btn btn-secondary" href="filmes.html">
-            Explorar catálogo
-          </a>
-        </div>
-      </div>
-      <div class="hero-decoration" aria-hidden="true">✦</div>
-    </section>
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <span class="tag">Seu próximo favorito está aqui</span>
+      <h1>Entre em outro universo.</h1>
+      <p>Descubra filmes e séries, explore novas histórias e monte sua própria lista de favoritos.</p>
+      <button class="button" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+        Explorar catálogo →
+      </button>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">ESCOLHAS PARA VOCÊ</p>
-          <h2>Filmes em destaque</h2>
-        </div>
-        <a class="text-link" href="filmes.html">Ver todos →</a>
-      </div>
-      <div class="movie-grid" id="featuredMovies"></div>
-    </section>
+  <main id="catalogo">
+    <h2 class="section-heading" id="catalogTitle">Em destaque</h2>
 
-    <section class="section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">MARATONA LIBERADA</p>
-          <h2>Séries para descobrir</h2>
-        </div>
-        <a class="text-link" href="series.html">Ver séries →</a>
-      </div>
-      <div class="movie-grid" id="featuredSeries"></div>
-    </section>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Buscar filmes e séries...">
+      <select id="type">
+        <option value="todos">Todos</option>
+        <option value="filme">Filmes</option>
+        <option value="serie">Séries</option>
+      </select>
+      <select id="genre">
+        <option value="todos">Todos os gêneros</option>
+        <option value="Ação">Ação</option>
+        <option value="Aventura">Aventura</option>
+        <option value="Drama">Drama</option>
+        <option value="Fantasia">Fantasia</option>
+        <option value="Ficção científica">Ficção científica</option>
+        <option value="Animação">Animação</option>
+      </select>
+    </div>
 
-    <section class="promo section">
-      <div>
-        <p class="eyebrow">SEU PRÓXIMO FAVORITO</p>
-        <h2>Uma história nova espera por você.</h2>
-        <p>Salve seus títulos favoritos e encontre tudo depois.</p>
-      </div>
-      <a class="btn btn-primary" href="minha-lista.html">Minha lista ♥</a>
-    </section>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty">Nenhum título encontrado. Até o catálogo tem seus dias difíceis.</p>
   </main>
 
-  <footer class="footer">
-    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
-    <p>Catálogo demonstrativo com títulos fictícios. Não reproduz vídeos.</p>
-    <span>© 2026 CineVerse</span>
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="close" id="close" aria-label="Fechar">×</button>
+      <h2 id="modalTitle"></h2>
+      <p id="modalInfo"></p>
+      <p id="modalDescription"></p>
+      <button class="button" id="saveButton">♡ Adicionar à minha lista</button>
+    </div>
+  </div>
+
+  <footer>
+    CineVerse • Um universo de histórias para descobrir.<br><br>
+    Pôsteres fornecidos pelo The Movie Database (TMDB). Este site é um projeto independente e não é afiliado ao TMDB.
   </footer>
 
-  <div class="toast" id="toast" role="status"></div>
+  <script>
+    const posterBase = "https://image.tmdb.org/t/p/w500";
+
+    // Os pôsteres são carregados diretamente por URL.
+    // Não é necessário criar uma pasta img.
+    const titles = [
+      {
+        name: "Duna: Parte Dois",
+        year: 2024, type: "filme", genre: "Ficção científica",
+        poster: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+        description: "Paul Atreides une forças com Chani e os Fremen enquanto busca seu destino em Arrakis."
+      },
+      {
+        name: "Homem-Aranha: Através do Aranhaverso",
+        year: 2023, type: "filme", genre: "Animação",
+        poster: "/8Vt6mWEReuy4Of61Lnj5Xj607fg.jpg",
+        description: "Miles Morales atravessa diferentes universos e encontra outras versões do herói."
+      },
+      {
+        name: "Barbie",
+        year: 2023, type: "filme", genre: "Aventura",
+        poster: "/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
+        description: "Uma aventura colorida que começa quando Barbie sai de seu mundo habitual."
+      },
+      {
+        name: "Batman",
+        year: 2022, type: "filme", genre: "Ação",
+        poster: "/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+        description: "Batman investiga uma série de crimes que revela a corrupção de Gotham."
+      },
+      {
+        name: "Divertida Mente 2",
+        year: 2024, type: "filme", genre: "Animação",
+        poster: "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
+        description: "Riley cresce e novas emoções chegam para transformar sua central de controle."
+      },
+      {
+        name: "Oppenheimer",
+        year: 2023, type: "filme", genre: "Drama",
+        poster: "/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
+        description: "Drama biográfico sobre o físico J. Robert Oppenheimer e o desenvolvimento da bomba atômica."
+      },
+      {
+        name: "Clube da Luta",
+        year: 1999, type: "filme", genre: "Drama",
+        poster: "/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg",
+        description: "Um homem insatisfeito com a rotina conhece alguém que muda sua visão do mundo."
+      },
+      {
+        name: "Wicked",
+        year: 2024, type: "filme", genre: "Fantasia",
+        poster: "/xDGbZ0JJ3mYaGKy4Nzd9Kph6M9L.jpg",
+        description: "A história acompanha a amizade inesperada entre duas jovens bruxas de Oz."
+      },
+      {
+        name: "Stranger Things",
+        year: 2016, type: "serie", genre: "Ficção científica",
+        poster: "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
+        description: "Um grupo de amigos enfrenta mistérios sobrenaturais em uma pequena cidade."
+      },
+      {
+        name: "One Piece",
+        year: 2023, type: "serie", genre: "Aventura",
+        poster: "/rVX05xRKS5JhEYQFObCi4lAnZT4.jpg",
+        description: "Monkey D. Luffy parte em uma jornada pelo mar para encontrar o lendário tesouro One Piece."
+      },
+      {
+        name: "The Batman",
+        year: 2022, type: "filme", genre: "Ação",
+        poster: "/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+        description: "Um investigador mascarado tenta desvendar uma conspiração em Gotham."
+      },
+      {
+        name: "Homem-Aranha: Sem Volta para Casa",
+        year: 2021, type: "filme", genre: "Ação",
+        poster: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+        description: "Peter Parker enfrenta consequências inesperadas depois que sua identidade é revelada."
+      }
+    ];
+
+    const grid = document.getElementById("grid");
+    const search = document.getElementById("search");
+    const type = document.getElementById("type");
+    const genre = document.getElementById("genre");
+    const empty = document.getElementById("empty");
+    const modal = document.getElementById("modal");
+    const favoritesLink = document.getElementById("favoritesLink");
+    let favoritesOnly = false;
+    let selected = null;
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem("cineverse-favorites") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveFavorites(list) {
+      localStorage.setItem("cineverse-favorites", JSON.stringify(list));
+    }
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const selectedType = type.value;
+      const selectedGenre = genre.value;
+      const favorites = getFavorites();
+
+      const filtered = titles.filter(movie => {
+        const matchesQuery = movie.name.toLowerCase().includes(query);
+        const matchesType = selectedType === "todos" || movie.type === selectedType;
+        const matchesGenre = selectedGenre === "todos" || movie.genre === selectedGenre;
+        const matchesFavorite = !favoritesOnly || favorites.includes(movie.name);
+        return matchesQuery && matchesType && matchesGenre && matchesFavorite;
+      });
+
+      grid.innerHTML = filtered.map(movie => `
+        <article class="movie" tabindex="0" data-name="${movie.name.replace(/"/g, "&quot;")}">
+          <div class="poster">
+            <img
+              src="${posterBase + movie.poster}"
+              alt="Pôster de ${movie.name.replace(/"/g, "&quot;")}"
+              loading="lazy"
+              onerror="this.classList.add('failed')"
+            >
+            <div class="poster-fallback">${movie.name}</div>
+          </div>
+          <h3>${movie.name}</h3>
+          <p>${movie.year} • ${movie.type === "filme" ? "Filme" : "Série"}</p>
+        </article>
+      `).join("");
+
+      empty.style.display = filtered.length ? "none" : "block";
+    }
+
+    function openDetails(name) {
+      selected = titles.find(movie => movie.name === name);
+      if (!selected) return;
+
+      document.getElementById("modalTitle").textContent = selected.name;
+      document.getElementById("modalInfo").textContent =
+        `${selected.year} • ${selected.type === "filme" ? "Filme" : "Série"} • ${selected.genre}`;
+      document.getElementById("modalDescription").textContent = selected.description;
+      updateSaveButton();
+      modal.classList.add("open");
+    }
+
+    function updateSaveButton() {
+      const favorites = getFavorites();
+      const saved = selected && favorites.includes(selected.name);
+      document.getElementById("saveButton").textContent =
+        saved ? "♥ Remover da minha lista" : "♡ Adicionar à minha lista";
+    }
+
+    grid.addEventListener("click", event => {
+      const card = event.target.closest(".movie");
+      if (card) openDetails(card.dataset.name);
+    });
+
+    grid.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const card = event.target.closest(".movie");
+      if (card) {
+        event.preventDefault();
+        openDetails(card.dataset.name);
+      }
+    });
+
+    document.getElementById("saveButton").addEventListener("click", () => {
+      if (!selected) return;
+      const favorites = getFavorites();
+      const index = favorites.indexOf(selected.name);
+
+      if (index >= 0) favorites.splice(index, 1);
+      else favorites.push(selected.name);
+
+      saveFavorites(favorites);
+      updateSaveButton();
+      render();
+    });
+
+    document.getElementById("close").addEventListener("click", () => {
+      modal.classList.remove("open");
+    });
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) modal.classList.remove("open");
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") modal.classList.remove("open");
+    });
+
+    [search, type, genre].forEach(control => {
+      control.addEventListener("input", render);
+      control.addEventListener("change", render);
+    });
+
+    favoritesLink.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      document.getElementById("catalogTitle").textContent =
+        favoritesOnly ? "Minha lista ♡" : "Em destaque";
+      favoritesLink.textContent = favoritesOnly ? "Ver catálogo" : "Minha lista ♡";
+      render();
+    });
+
+    render();
+  </script>
 </body>
 </html>
