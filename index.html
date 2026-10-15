@@ -4,263 +4,553 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineVerse | Seu universo de filmes</title>
+  <meta name="theme-color" content="#0b0712">
+  <meta name="description" content="CineVerse: descubra filmes e séries e organize seus favoritos.">
+  <title>CineVerse | Seu universo de entretenimento</title>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0712;
+      --panel: #151020;
+      --panel-light: #21172e;
+      --purple: #a66bff;
+      --purple-light: #c8a5ff;
+      --text: #ffffff;
+      --muted: #b9afc7;
+      --border: #352545;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #090711;
-      color: #fff;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 22px 6%;
-      background: #100c1c;
-      border-bottom: 1px solid #302044;
-      flex-wrap: wrap;
+    button, input, select {
+      font: inherit;
     }
 
-    .logo {
-      color: #c9a4ff;
-      font-size: 27px;
-      font-weight: 900;
+    button, a, select {
+      -webkit-tap-highlight-color: transparent;
     }
 
-    nav { display: flex; gap: 20px; flex-wrap: wrap; }
-
-    nav a {
-      color: #ddd5e9;
+    a {
+      color: inherit;
       text-decoration: none;
     }
 
-    nav a:hover { color: #c9a4ff; }
+    button {
+      color: inherit;
+    }
 
-    .hero {
-      min-height: 390px;
-      padding: 75px 7%;
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
-      background:
-        linear-gradient(90deg, #0b0813 10%, #0b0813dd 45%, #0b081355),
-        url("https://image.tmdb.org/t/p/w1280/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg")
-        center 35% / cover;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 6%;
+      background: rgba(11, 7, 18, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
-    .hero-content { max-width: 570px; }
-
-    .tag {
-      color: #d5b5ff;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
-      font-weight: bold;
+    .logo {
+      flex-shrink: 0;
+      color: var(--purple-light);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -1px;
     }
 
-    h1 {
-      font-size: clamp(38px, 6vw, 66px);
-      margin: 15px 0;
-    }
-
-    .hero p {
-      color: #d1cbd9;
-      line-height: 1.7;
-      max-width: 500px;
-    }
-
-    .button {
-      border: 0;
-      background: #9c5cff;
+    .logo span {
       color: white;
-      padding: 13px 21px;
-      border-radius: 9px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 22px;
     }
 
-    .button:hover { background: #b27dff; }
-
-    main { padding: 38px 6%; }
-
-    .section-heading {
-      font-size: 27px;
-      margin-bottom: 20px;
-    }
-
-    .tools {
+    .navigation {
       display: flex;
-      gap: 12px;
-      margin-bottom: 28px;
+      align-items: center;
+      gap: 22px;
       flex-wrap: wrap;
     }
 
-    input, select {
-      background: #171222;
-      border: 1px solid #403052;
-      color: white;
-      border-radius: 9px;
-      padding: 13px;
-      min-width: 180px;
+    .navigation a {
+      color: #d7d0e1;
+      font-size: 14px;
+      transition: color .2s;
     }
 
-    input { flex: 1; }
+    .navigation a:hover,
+    .navigation a.active {
+      color: var(--purple-light);
+    }
+
+    .hero {
+      min-height: 460px;
+      display: flex;
+      align-items: center;
+      padding: 65px 7%;
+      background:
+        linear-gradient(90deg, #0b0712 0%, #0b0712ed 36%, #0b071280 72%, #0b071255 100%),
+        linear-gradient(0deg, #0b0712 0%, transparent 35%),
+        url("https://image.tmdb.org/t/p/original/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg")
+        center 35% / cover no-repeat;
+    }
+
+    .hero-content {
+      max-width: 620px;
+    }
+
+    .eyebrow {
+      color: var(--purple-light);
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 16px 0;
+      font-size: clamp(40px, 6vw, 70px);
+      line-height: 1.03;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      max-width: 490px;
+      color: #d5cddd;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .primary-button,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      margin-top: 22px;
+      padding: 12px 19px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .primary-button {
+      background: var(--purple);
+      color: white;
+    }
+
+    .primary-button:hover {
+      background: #b98aff;
+      transform: translateY(-2px);
+    }
+
+    .secondary-button {
+      background: #ffffff12;
+      border-color: #ffffff35;
+    }
+
+    .secondary-button:hover {
+      background: #ffffff22;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1600px;
+      margin: auto;
+      padding: 38px 6%;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      font-size: 25px;
+    }
+
+    .section-heading p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 180px 200px;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .tools input,
+    .tools select {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 12px 14px;
+      color: white;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+    }
+
+    .tools input:focus,
+    .tools select:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 2px #a66bff20;
+    }
+
+    .tools input::placeholder {
+      color: #93889f;
+    }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 24px 17px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 25px 16px;
     }
 
-    .movie {
+    .movie-card {
       min-width: 0;
       cursor: pointer;
-      transition: transform .25s;
+      outline: none;
+      transition: transform .22s ease;
     }
 
-    .movie:hover { transform: translateY(-7px); }
+    .movie-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .movie-card:focus-visible .poster {
+      outline: 2px solid var(--purple-light);
+      outline-offset: 3px;
+    }
 
     .poster {
       position: relative;
       overflow: hidden;
-      border-radius: 12px;
       aspect-ratio: 2 / 3;
-      background: #21182e;
-      border: 1px solid #382748;
+      background: linear-gradient(145deg, #352047, #171020);
+      border: 1px solid #3b2a4c;
+      border-radius: 10px;
     }
 
     .poster img {
+      display: block;
       width: 100%;
       height: 100%;
-      display: block;
       object-fit: cover;
+      transition: transform .35s;
     }
 
-    .poster img.failed { display: none; }
+    .movie-card:hover .poster img {
+      transform: scale(1.045);
+    }
+
+    .poster img.failed {
+      display: none;
+    }
 
     .poster-fallback {
-      display: none;
       position: absolute;
       inset: 0;
-      padding: 15px;
+      display: none;
       align-items: center;
       justify-content: center;
+      padding: 15px;
+      color: white;
       text-align: center;
-      background: linear-gradient(145deg, #40215e, #100c1c);
+      font-size: 18px;
       font-weight: bold;
+      overflow-wrap: anywhere;
+      background: linear-gradient(145deg, #59337b, #130c20);
     }
 
-    .poster img.failed + .poster-fallback { display: flex; }
-
-    .movie h3 {
-      font-size: 15px;
-      margin-top: 11px;
-      line-height: 1.4;
+    .poster img.failed + .poster-fallback {
+      display: flex;
     }
 
-    .movie p {
-      color: #a9a0b7;
-      font-size: 13px;
+    .favorite-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 2;
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid #ffffff35;
+      border-radius: 50%;
+      background: #100b19dd;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .favorite-button.saved {
+      color: #e2baff;
+      background: #572e79ed;
+    }
+
+    .movie-card h3 {
+      margin-top: 10px;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .movie-meta {
       margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
     .empty {
-      color: #bdb3ca;
-      padding: 25px 0;
       display: none;
+      padding: 35px 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
     }
 
-    footer {
+    .empty.visible {
+      display: block;
+    }
+
+    .footer {
+      margin-top: 45px;
+      padding: 30px 6%;
+      color: #9c91aa;
       text-align: center;
-      padding: 30px 15px;
-      color: #9d93aa;
-      border-top: 1px solid #302044;
-      margin-top: 35px;
-      font-size: 13px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .footer strong {
+      color: var(--purple-light);
     }
 
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 5;
+      z-index: 30;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: #000c;
+      background: #000d;
+      overflow-y: auto;
     }
 
-    .modal.open { display: flex; }
+    .modal.open {
+      display: flex;
+    }
 
     .modal-content {
-      width: min(650px, 100%);
-      background: #171122;
-      border: 1px solid #49345f;
-      border-radius: 16px;
-      padding: 25px;
       position: relative;
+      width: min(540px, 100%);
+      padding: 28px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 80px #0009;
     }
 
-    .close {
-      float: right;
-      color: white;
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
       border: 0;
-      background: transparent;
-      font-size: 28px;
+      border-radius: 8px;
+      background: #ffffff12;
+      font-size: 25px;
       cursor: pointer;
     }
 
-    .modal-content p {
-      color: #d0c7dc;
-      line-height: 1.7;
-      margin-top: 12px;
+    .modal-content h2 {
+      padding-right: 35px;
+      color: var(--purple-light);
+      font-size: 27px;
     }
 
-    @media (max-width: 600px) {
-      header { padding: 18px 5%; }
-      .hero { padding: 55px 6%; min-height: 350px; }
-      main { padding: 30px 5%; }
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
-      input, select { width: 100%; }
+    .modal-info {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .modal-description {
+      margin-top: 18px;
+      color: #ded6e8;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .modal-content .primary-button {
+      width: 100%;
+    }
+
+    @media (max-width: 1100px) {
+      .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .hero {
+        min-height: 400px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .header {
+        position: relative;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 17px 5%;
+        gap: 15px;
+      }
+
+      .navigation {
+        gap: 16px;
+      }
+
+      .hero {
+        min-height: 390px;
+        padding: 50px 6%;
+        background-position: center;
+      }
+
+      .hero h1 {
+        font-size: 46px;
+      }
+
+      main {
+        padding: 30px 5%;
+      }
+
+      .tools {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .tools input {
+        grid-column: 1 / -1;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px 12px;
+      }
+
+      .movie-card h3 {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 14px;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .navigation {
+        gap: 13px;
+      }
+
+      .navigation a {
+        font-size: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">CineVerse ✦</div>
-    <nav>
-      <a href="#inicio">Início</a>
-      <a href="#catalogo">Catálogo</a>
-      <a href="#catalogo" id="favoritesLink">Minha lista ♡</a>
+  <header class="header">
+    <a class="logo" href="index.html" aria-label="CineVerse início">
+      Cine<span>Verse</span> ✦
+    </a>
+
+    <nav class="navigation" aria-label="Navegação principal">
+      <a class="active" href="index.html">Início</a>
+      <a href="filmes.html">Filmes</a>
+      <a href="series.html">Séries</a>
+      <a href="#catalogo" id="navFavorites">Minha lista ♡</a>
     </nav>
   </header>
 
   <section class="hero" id="inicio">
     <div class="hero-content">
-      <span class="tag">Seu próximo favorito está aqui</span>
-      <h1>Entre em outro universo.</h1>
-      <p>Descubra filmes e séries, explore novas histórias e monte sua própria lista de favoritos.</p>
-      <button class="button" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
-        Explorar catálogo →
+      <span class="eyebrow">Seu universo de entretenimento</span>
+      <h1>Histórias que levam você além.</h1>
+      <p>
+        Explore universos, descubra novos favoritos e encontre a próxima
+        história que merece sua atenção.
+      </p>
+      <button class="primary-button" id="exploreButton" type="button">
+        Explorar catálogo <span aria-hidden="true">→</span>
       </button>
     </div>
   </section>
 
   <main id="catalogo">
-    <h2 class="section-heading" id="catalogTitle">Em destaque</h2>
+    <div class="section-heading">
+      <div>
+        <h2 id="catalogTitle">Em destaque</h2>
+        <p id="catalogSubtitle">Filmes e séries para adicionar à sua lista.</p>
+      </div>
+    </div>
 
     <div class="tools">
-      <input id="search" type="search" placeholder="Buscar filmes e séries...">
-      <select id="type">
-        <option value="todos">Todos</option>
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Buscar um título..."
+        aria-label="Buscar título"
+        autocomplete="off"
+      >
+
+      <select id="typeFilter" aria-label="Filtrar por tipo">
+        <option value="todos">Todos os títulos</option>
         <option value="filme">Filmes</option>
         <option value="serie">Séries</option>
       </select>
-      <select id="genre">
+
+      <select id="genreFilter" aria-label="Filtrar por gênero">
         <option value="todos">Todos os gêneros</option>
         <option value="Ação">Ação</option>
         <option value="Aventura">Aventura</option>
@@ -271,232 +561,430 @@
       </select>
     </div>
 
-    <div class="grid" id="grid"></div>
-    <p class="empty" id="empty">Nenhum título encontrado. Até o catálogo tem seus dias difíceis.</p>
+    <section class="grid" id="movieGrid" aria-label="Catálogo de títulos"></section>
+
+    <p class="empty" id="emptyMessage">
+      Nenhum título encontrado.<br>
+      Tente mudar a busca ou os filtros.
+    </p>
   </main>
 
-  <div class="modal" id="modal" role="dialog" aria-modal="true">
+  <footer class="footer">
+    <strong>CineVerse ✦</strong><br>
+    Seu universo de filmes e séries.<br>
+    Pôsteres fornecidos pelo TMDB. Este projeto independente não é afiliado ao TMDB.
+  </footer>
+
+  <div
+    class="modal"
+    id="detailsModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+    aria-hidden="true"
+  >
     <div class="modal-content">
-      <button class="close" id="close" aria-label="Fechar">×</button>
+      <button class="modal-close" id="closeModal" type="button" aria-label="Fechar detalhes">×</button>
       <h2 id="modalTitle"></h2>
-      <p id="modalInfo"></p>
-      <p id="modalDescription"></p>
-      <button class="button" id="saveButton">♡ Adicionar à minha lista</button>
+      <p class="modal-info" id="modalInfo"></p>
+      <p class="modal-description" id="modalDescription"></p>
+      <button class="primary-button" id="modalFavorite" type="button">
+        ♡ Adicionar à minha lista
+      </button>
     </div>
   </div>
 
-  <footer>
-    CineVerse • Um universo de histórias para descobrir.<br><br>
-    Pôsteres fornecidos pelo The Movie Database (TMDB). Este site é um projeto independente e não é afiliado ao TMDB.
-  </footer>
-
   <script>
-    const posterBase = "https://image.tmdb.org/t/p/w500";
+    "use strict";
 
-    // Os pôsteres são carregados diretamente por URL.
-    // Não é necessário criar uma pasta img.
+    const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
+
     const titles = [
       {
+        id: "dune2",
         name: "Duna: Parte Dois",
-        year: 2024, type: "filme", genre: "Ficção científica",
+        year: 2024,
+        type: "filme",
+        genre: "Ficção científica",
         poster: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
         description: "Paul Atreides une forças com Chani e os Fremen enquanto busca seu destino em Arrakis."
       },
       {
+        id: "spiderverse",
         name: "Homem-Aranha: Através do Aranhaverso",
-        year: 2023, type: "filme", genre: "Animação",
+        year: 2023,
+        type: "filme",
+        genre: "Animação",
         poster: "/8Vt6mWEReuy4Of61Lnj5Xj607fg.jpg",
-        description: "Miles Morales atravessa diferentes universos e encontra outras versões do herói."
+        description: "Miles Morales atravessa diferentes universos e conhece outras versões do herói."
       },
       {
+        id: "barbie",
         name: "Barbie",
-        year: 2023, type: "filme", genre: "Aventura",
+        year: 2023,
+        type: "filme",
+        genre: "Aventura",
         poster: "/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
-        description: "Uma aventura colorida que começa quando Barbie sai de seu mundo habitual."
+        description: "Uma aventura colorida começa quando Barbie deixa seu mundo habitual para explorar a realidade."
       },
       {
+        id: "batman",
         name: "Batman",
-        year: 2022, type: "filme", genre: "Ação",
+        year: 2022,
+        type: "filme",
+        genre: "Ação",
         poster: "/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-        description: "Batman investiga uma série de crimes que revela a corrupção de Gotham."
+        description: "Batman investiga uma série de crimes que revela uma conspiração em Gotham."
       },
       {
+        id: "insideout2",
         name: "Divertida Mente 2",
-        year: 2024, type: "filme", genre: "Animação",
+        year: 2024,
+        type: "filme",
+        genre: "Animação",
         poster: "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
-        description: "Riley cresce e novas emoções chegam para transformar sua central de controle."
+        description: "Novas emoções chegam à mente de Riley enquanto ela passa por mudanças importantes."
       },
       {
+        id: "oppenheimer",
         name: "Oppenheimer",
-        year: 2023, type: "filme", genre: "Drama",
+        year: 2023,
+        type: "filme",
+        genre: "Drama",
         poster: "/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
         description: "Drama biográfico sobre o físico J. Robert Oppenheimer e o desenvolvimento da bomba atômica."
       },
       {
-        name: "Clube da Luta",
-        year: 1999, type: "filme", genre: "Drama",
-        poster: "/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg",
-        description: "Um homem insatisfeito com a rotina conhece alguém que muda sua visão do mundo."
-      },
-      {
+        id: "wicked",
         name: "Wicked",
-        year: 2024, type: "filme", genre: "Fantasia",
+        year: 2024,
+        type: "filme",
+        genre: "Fantasia",
         poster: "/xDGbZ0JJ3mYaGKy4Nzd9Kph6M9L.jpg",
-        description: "A história acompanha a amizade inesperada entre duas jovens bruxas de Oz."
+        description: "A amizade inesperada entre duas jovens bruxas muda o destino de Oz."
       },
       {
+        id: "spiderman",
+        name: "Homem-Aranha: Sem Volta para Casa",
+        year: 2021,
+        type: "filme",
+        genre: "Ação",
+        poster: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+        description: "Peter Parker enfrenta consequências inesperadas depois que sua identidade é revelada."
+      },
+      {
+        id: "fightclub",
+        name: "Clube da Luta",
+        year: 1999,
+        type: "filme",
+        genre: "Drama",
+        poster: "/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg",
+        description: "Um homem insatisfeito com a rotina conhece alguém que transforma sua maneira de enxergar o mundo."
+      },
+      {
+        id: "strangerthings",
         name: "Stranger Things",
-        year: 2016, type: "serie", genre: "Ficção científica",
+        year: 2016,
+        type: "serie",
+        genre: "Ficção científica",
         poster: "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
         description: "Um grupo de amigos enfrenta mistérios sobrenaturais em uma pequena cidade."
       },
       {
+        id: "onepiece",
         name: "One Piece",
-        year: 2023, type: "serie", genre: "Aventura",
+        year: 2023,
+        type: "serie",
+        genre: "Aventura",
         poster: "/rVX05xRKS5JhEYQFObCi4lAnZT4.jpg",
-        description: "Monkey D. Luffy parte em uma jornada pelo mar para encontrar o lendário tesouro One Piece."
+        description: "Monkey D. Luffy e sua tripulação partem em busca do lendário tesouro One Piece."
       },
       {
-        name: "The Batman",
-        year: 2022, type: "filme", genre: "Ação",
-        poster: "/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-        description: "Um investigador mascarado tenta desvendar uma conspiração em Gotham."
-      },
-      {
-        name: "Homem-Aranha: Sem Volta para Casa",
-        year: 2021, type: "filme", genre: "Ação",
-        poster: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-        description: "Peter Parker enfrenta consequências inesperadas depois que sua identidade é revelada."
+        id: "interstellar",
+        name: "Interestelar",
+        year: 2014,
+        type: "filme",
+        genre: "Ficção científica",
+        poster: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+        description: "Uma missão espacial procura possibilidades para o futuro da humanidade."
       }
     ];
 
-    const grid = document.getElementById("grid");
-    const search = document.getElementById("search");
-    const type = document.getElementById("type");
-    const genre = document.getElementById("genre");
-    const empty = document.getElementById("empty");
-    const modal = document.getElementById("modal");
-    const favoritesLink = document.getElementById("favoritesLink");
+    const grid = document.getElementById("movieGrid");
+    const searchInput = document.getElementById("searchInput");
+    const typeFilter = document.getElementById("typeFilter");
+    const genreFilter = document.getElementById("genreFilter");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const catalogTitle = document.getElementById("catalogTitle");
+    const catalogSubtitle = document.getElementById("catalogSubtitle");
+    const modal = document.getElementById("detailsModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalInfo = document.getElementById("modalInfo");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalFavorite = document.getElementById("modalFavorite");
+    const navFavorites = document.getElementById("navFavorites");
+
     let favoritesOnly = false;
-    let selected = null;
+    let selectedTitle = null;
+    let lastFocusedElement = null;
 
     function getFavorites() {
       try {
-        return JSON.parse(localStorage.getItem("cineverse-favorites") || "[]");
-      } catch {
+        const saved = JSON.parse(
+          localStorage.getItem("cineverse-favorites") || "[]"
+        );
+
+        return Array.isArray(saved)
+          ? saved.filter(id => typeof id === "string")
+          : [];
+      } catch (error) {
         return [];
       }
     }
 
-    function saveFavorites(list) {
-      localStorage.setItem("cineverse-favorites", JSON.stringify(list));
+    function setFavorites(favorites) {
+      try {
+        localStorage.setItem(
+          "cineverse-favorites",
+          JSON.stringify(favorites)
+        );
+        return true;
+      } catch (error) {
+        alert("Não foi possível salvar a lista neste navegador.");
+        return false;
+      }
     }
 
-    function render() {
-      const query = search.value.trim().toLowerCase();
-      const selectedType = type.value;
-      const selectedGenre = genre.value;
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
+    }
+
+    function getFilteredTitles() {
+      const query = searchInput.value.trim().toLocaleLowerCase("pt-BR");
+      const selectedType = typeFilter.value;
+      const selectedGenre = genreFilter.value;
       const favorites = getFavorites();
 
-      const filtered = titles.filter(movie => {
-        const matchesQuery = movie.name.toLowerCase().includes(query);
-        const matchesType = selectedType === "todos" || movie.type === selectedType;
-        const matchesGenre = selectedGenre === "todos" || movie.genre === selectedGenre;
-        const matchesFavorite = !favoritesOnly || favorites.includes(movie.name);
-        return matchesQuery && matchesType && matchesGenre && matchesFavorite;
+      return titles.filter(movie => {
+        const matchesName = movie.name
+          .toLocaleLowerCase("pt-BR")
+          .includes(query);
+
+        const matchesType =
+          selectedType === "todos" || movie.type === selectedType;
+
+        const matchesGenre =
+          selectedGenre === "todos" || movie.genre === selectedGenre;
+
+        const matchesFavorites =
+          !favoritesOnly || favorites.includes(movie.id);
+
+        return matchesName && matchesType && matchesGenre && matchesFavorites;
+      });
+    }
+
+    function renderCatalog() {
+      const favorites = getFavorites();
+      const filteredTitles = getFilteredTitles();
+
+      grid.innerHTML = filteredTitles.map(movie => {
+        const saved = favorites.includes(movie.id);
+        const safeName = escapeHTML(movie.name);
+        const safeGenre = escapeHTML(movie.genre);
+        const safeDescription = escapeHTML(movie.description);
+        const typeLabel = movie.type === "filme" ? "Filme" : "Série";
+
+        return `
+          <article
+            class="movie-card"
+            data-id="${escapeHTML(movie.id)}"
+            tabindex="0"
+            role="button"
+            aria-label="Ver detalhes de ${safeName}"
+          >
+            <div class="poster">
+              <img
+                src="${POSTER_BASE}${movie.poster}"
+                alt="Pôster de ${safeName}"
+                loading="lazy"
+                decoding="async"
+              >
+              <div class="poster-fallback">${safeName}</div>
+              <button
+                class="favorite-button ${saved ? "saved" : ""}"
+                type="button"
+                data-favorite="${escapeHTML(movie.id)}"
+                aria-label="${saved ? "Remover dos favoritos" : "Adicionar aos favoritos"}: ${safeName}"
+                aria-pressed="${saved}"
+                title="${saved ? "Remover da minha lista" : "Adicionar à minha lista"}"
+              >${saved ? "♥" : "♡"}</button>
+            </div>
+            <h3>${safeName}</h3>
+            <p class="movie-meta">${movie.year} · ${typeLabel} · ${safeGenre}</p>
+          </article>
+        `;
+      }).join("");
+
+      grid.querySelectorAll(".poster img").forEach(img => {
+        img.addEventListener("error", () => {
+          img.classList.add("failed");
+        }, { once: true });
       });
 
-      grid.innerHTML = filtered.map(movie => `
-        <article class="movie" tabindex="0" data-name="${movie.name.replace(/"/g, "&quot;")}">
-          <div class="poster">
-            <img
-              src="${posterBase + movie.poster}"
-              alt="Pôster de ${movie.name.replace(/"/g, "&quot;")}"
-              loading="lazy"
-              onerror="this.classList.add('failed')"
-            >
-            <div class="poster-fallback">${movie.name}</div>
-          </div>
-          <h3>${movie.name}</h3>
-          <p>${movie.year} • ${movie.type === "filme" ? "Filme" : "Série"}</p>
-        </article>
-      `).join("");
+      emptyMessage.classList.toggle("visible", filteredTitles.length === 0);
 
-      empty.style.display = filtered.length ? "none" : "block";
+      if (favoritesOnly) {
+        catalogTitle.textContent = "Minha lista ♡";
+        catalogSubtitle.textContent =
+          `${favorites.length} título(s) salvo(s) no seu navegador.`;
+      } else {
+        catalogTitle.textContent = "Em destaque";
+        catalogSubtitle.textContent =
+          "Filmes e séries para adicionar à sua lista.";
+      }
+
+      navFavorites.textContent = favoritesOnly
+        ? "Ver catálogo"
+        : "Minha lista ♡";
     }
 
-    function openDetails(name) {
-      selected = titles.find(movie => movie.name === name);
-      if (!selected) return;
-
-      document.getElementById("modalTitle").textContent = selected.name;
-      document.getElementById("modalInfo").textContent =
-        `${selected.year} • ${selected.type === "filme" ? "Filme" : "Série"} • ${selected.genre}`;
-      document.getElementById("modalDescription").textContent = selected.description;
-      updateSaveButton();
-      modal.classList.add("open");
-    }
-
-    function updateSaveButton() {
+    function toggleFavorite(id) {
       const favorites = getFavorites();
-      const saved = selected && favorites.includes(selected.name);
-      document.getElementById("saveButton").textContent =
-        saved ? "♥ Remover da minha lista" : "♡ Adicionar à minha lista";
+      const index = favorites.indexOf(id);
+
+      if (index === -1) {
+        favorites.push(id);
+      } else {
+        favorites.splice(index, 1);
+      }
+
+      if (setFavorites(favorites)) {
+        renderCatalog();
+
+        if (selectedTitle && selectedTitle.id === id) {
+          updateModalFavorite();
+        }
+      }
+    }
+
+    function openDetails(id) {
+      const movie = titles.find(item => item.id === id);
+      if (!movie) return;
+
+      selectedTitle = movie;
+      lastFocusedElement = document.activeElement;
+
+      modalTitle.textContent = movie.name;
+      modalInfo.textContent =
+        `${movie.year} · ${movie.type === "filme" ? "Filme" : "Série"} · ${movie.genre}`;
+      modalDescription.textContent = movie.description;
+
+      updateModalFavorite();
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      document.getElementById("closeModal").focus();
+    }
+
+    function updateModalFavorite() {
+      if (!selectedTitle) return;
+
+      const saved = getFavorites().includes(selectedTitle.id);
+
+      modalFavorite.textContent = saved
+        ? "♥ Remover da minha lista"
+        : "♡ Adicionar à minha lista";
+    }
+
+    function closeDetails() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus();
+      }
     }
 
     grid.addEventListener("click", event => {
-      const card = event.target.closest(".movie");
-      if (card) openDetails(card.dataset.name);
+      const favoriteButton = event.target.closest("[data-favorite]");
+
+      if (favoriteButton) {
+        event.stopPropagation();
+        toggleFavorite(favoriteButton.dataset.favorite);
+        return;
+      }
+
+      const card = event.target.closest(".movie-card");
+      if (card) openDetails(card.dataset.id);
     });
 
     grid.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      const card = event.target.closest(".movie");
-      if (card) {
-        event.preventDefault();
-        openDetails(card.dataset.name);
+      if (event.target.closest("button")) return;
+
+      if (event.key === "Enter" || event.key === " ") {
+        const card = event.target.closest(".movie-card");
+
+        if (card) {
+          event.preventDefault();
+          openDetails(card.dataset.id);
+        }
       }
     });
 
-    document.getElementById("saveButton").addEventListener("click", () => {
-      if (!selected) return;
-      const favorites = getFavorites();
-      const index = favorites.indexOf(selected.name);
+    searchInput.addEventListener("input", renderCatalog);
+    typeFilter.addEventListener("change", renderCatalog);
+    genreFilter.addEventListener("change", renderCatalog);
 
-      if (index >= 0) favorites.splice(index, 1);
-      else favorites.push(selected.name);
-
-      saveFavorites(favorites);
-      updateSaveButton();
-      render();
+    document.getElementById("exploreButton").addEventListener("click", () => {
+      document.getElementById("catalogo").scrollIntoView({
+        behavior: "smooth"
+      });
+      searchInput.focus({ preventScroll: true });
     });
 
-    document.getElementById("close").addEventListener("click", () => {
-      modal.classList.remove("open");
+    navFavorites.addEventListener("click", event => {
+      event.preventDefault();
+      favoritesOnly = !favoritesOnly;
+      renderCatalog();
+
+      document.getElementById("catalogo").scrollIntoView({
+        behavior: "smooth"
+      });
     });
+
+    modalFavorite.addEventListener("click", () => {
+      if (selectedTitle) toggleFavorite(selectedTitle.id);
+    });
+
+    document.getElementById("closeModal").addEventListener("click", closeDetails);
 
     modal.addEventListener("click", event => {
-      if (event.target === modal) modal.classList.remove("open");
+      if (event.target === modal) closeDetails();
     });
 
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") modal.classList.remove("open");
+      if (event.key === "Escape" && modal.classList.contains("open")) {
+        closeDetails();
+      }
     });
 
-    [search, type, genre].forEach(control => {
-      control.addEventListener("input", render);
-      control.addEventListener("change", render);
+    window.addEventListener("storage", event => {
+      if (event.key === "cineverse-favorites") {
+        renderCatalog();
+        updateModalFavorite();
+      }
     });
 
-    favoritesLink.addEventListener("click", () => {
-      favoritesOnly = !favoritesOnly;
-      document.getElementById("catalogTitle").textContent =
-        favoritesOnly ? "Minha lista ♡" : "Em destaque";
-      favoritesLink.textContent = favoritesOnly ? "Ver catálogo" : "Minha lista ♡";
-      render();
-    });
-
-    render();
+    renderCatalog();
   </script>
 </body>
 </html>
