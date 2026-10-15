@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineVerse | Minha lista</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body data-page="watchlist">
+  <header class="topbar">
+    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Início</a>
+      <a href="filmes.html">Filmes</a>
+      <a href="series.html">Séries</a>
+      <a class="active" href="minha-lista.html">Minha lista ♥</a>
+    </nav>
+    <input class="global-search" id="globalSearch" type="search" placeholder="Buscar título...">
+  </header>
+
+  <main class="page-main">
+    <section class="page-heading">
+      <p class="eyebrow">GUARDADOS PARA DEPOIS</p>
+      <h1>Minha <span>lista.</span></h1>
+      <p>Seus títulos favoritos em um só lugar.</p>
+    </section>
+
+    <div class="results-line">
+      <span id="resultCount">Carregando lista...</span>
+      <button class="btn btn-secondary" id="clearWatchlist">Limpar minha lista</button>
+    </div>
+
+    <section class="movie-grid" id="watchlistGrid"></section>
+
+    <div class="empty-state hidden" id="watchlistEmpty">
+      <span>♡</span>
+      <h2>Sua lista está vazia</h2>
+      <p>Entre no catálogo e toque no coração de um título para salvá-lo.</p>
+      <a class="btn btn-primary" href="filmes.html">Explorar filmes</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
+    <p>Os favoritos ficam salvos neste navegador.</p>
+    <span>© 2026 CineVerse</span>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
