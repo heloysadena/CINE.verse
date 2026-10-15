@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineVerse | Filmes</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body data-page="movies">
+  <header class="topbar">
+    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Início</a>
+      <a class="active" href="filmes.html">Filmes</a>
+      <a href="series.html">Séries</a>
+      <a href="minha-lista.html">Minha lista ♥</a>
+    </nav>
+    <input class="global-search" id="globalSearch" type="search" placeholder="Buscar título...">
+  </header>
+
+  <main class="page-main">
+    <section class="page-heading">
+      <p class="eyebrow">EXPLORE O CATÁLOGO</p>
+      <h1>Filmes para cada <span>universo.</span></h1>
+      <p>Descubra histórias de ficção, mistério, aventura e muito mais.</p>
+    </section>
+
+    <section class="filters">
+      <input id="catalogSearch" type="search" placeholder="Pesquisar filmes...">
+
+      <select id="genreFilter" aria-label="Filtrar por gênero">
+        <option value="all">Todos os gêneros</option>
+        <option>Ficção científica</option>
+        <option>Aventura</option>
+        <option>Drama</option>
+        <option>Mistério</option>
+        <option>Comédia</option>
+        <option>Fantasia</option>
+        <option>Ação</option>
+        <option>Terror</option>
+      </select>
+
+      <select id="sortFilter" aria-label="Ordenar filmes">
+        <option value="featured">Em destaque</option>
+        <option value="title">Título A–Z</option>
+        <option value="year">Mais recentes</option>
+      </select>
+
+      <button class="btn btn-secondary" id="clearFilters">Limpar filtros</button>
+    </section>
+
+    <p class="results-line" id="resultCount">Carregando filmes...</p>
+    <section class="movie-grid" id="catalogGrid"></section>
+
+    <div class="empty-state hidden" id="emptyState">
+      <span>⌕</span>
+      <h2>Nenhum filme encontrado</h2>
+      <p>Tente pesquisar outro nome ou limpar os filtros.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <a class="brand" href="index.html">CINE<span>VERSE</span></a>
+    <p>Catálogo demonstrativo. Os títulos são fictícios.</p>
+    <span>© 2026 CineVerse</span>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
